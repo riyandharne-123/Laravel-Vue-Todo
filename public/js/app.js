@@ -2098,10 +2098,92 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     Navbar: _Layouts_Navbar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      todos: [],
+      todo: "",
+      edit: false,
+      selected: ""
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/todos').then(function (res) {
+      _this.todos = res.data.todos;
+    });
+  },
+  methods: {
+    getTodo: function getTodo(todo_id) {
+      var _this2 = this;
+
+      axios.get("/api/todos/".concat(todo_id)).then(function (res) {
+        _this2.selected = res.data.todo;
+        _this2.todo = res.data.todo.name;
+        _this2.edit = true;
+      });
+    },
+    deleteTodo: function deleteTodo(todo_id) {
+      var _this3 = this;
+
+      axios["delete"]("/api/todos/".concat(todo_id)).then(function (res) {
+        _this3.todos = res.data.todos;
+      });
+    },
+    addTodo: function addTodo() {
+      var _this4 = this;
+
+      if (this.todo != '') {
+        axios.post("/api/todos/", {
+          name: this.todo
+        }).then(function (res) {
+          _this4.todo = '';
+          _this4.todos = res.data.todos;
+        });
+      }
+    },
+    editTodo: function editTodo() {
+      var _this5 = this;
+
+      if (this.todo != '') {
+        axios.put("/api/todos/".concat(this.selected.id), {
+          name: this.todo
+        }).then(function (res) {
+          _this5.todo = '';
+          _this5.edit = false;
+          _this5.selected = '';
+          _this5.todos = res.data.todos;
+        });
+      }
+    }
   }
 });
 
@@ -2944,61 +3026,210 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("Navbar"), _vm._v(" "), _vm._m(0)], 1)
+  return _c(
+    "div",
+    [
+      _c("Navbar"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "container mx-auto",
+          staticStyle: { "padding-top": "2%" }
+        },
+        [
+          _c("div", { staticClass: "bg-white rounded p-5 text-center" }, [
+            _c("div", { staticClass: "flex flex-col" }, [
+              _c("div", { staticClass: "m-auto" }, [
+                _vm.edit == true
+                  ? _c("form", { staticClass: "space-y-5 mt-5" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.todo,
+                            expression: "todo"
+                          }
+                        ],
+                        staticClass:
+                          "w-full h-12 border border-gray-800 rounded px-3",
+                        attrs: {
+                          type: "text",
+                          placeholder: "Todo",
+                          required: ""
+                        },
+                        domProps: { value: _vm.todo },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.todo = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                          on: {
+                            click: function($event) {
+                              return _vm.editTodo()
+                            }
+                          }
+                        },
+                        [_vm._v("Edit Todo")]
+                      )
+                    ])
+                  : _c("form", { staticClass: "space-y-5 mt-5" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.todo,
+                            expression: "todo"
+                          }
+                        ],
+                        staticClass:
+                          "w-full h-12 border border-gray-800 rounded px-3",
+                        attrs: {
+                          type: "text",
+                          placeholder: "Todo",
+                          required: ""
+                        },
+                        domProps: { value: _vm.todo },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.todo = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                          on: {
+                            click: function($event) {
+                              return _vm.addTodo()
+                            }
+                          }
+                        },
+                        [_vm._v("Add Todo")]
+                      )
+                    ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "flex flex-col" }, [
+              _c("div", { staticClass: "m-auto" }, [
+                _c(
+                  "table",
+                  { staticClass: "table-auto" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm._l(_vm.todos, function(todo) {
+                      return _c("tbody", { key: todo.id }, [
+                        _c("tr", [
+                          _c("td", { staticClass: "border px-4 py-2" }, [
+                            _vm._v(_vm._s(todo.name))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border px-4 py-2" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "grid grid-rows-1 grid-cols-3 gap-4 p-1"
+                              },
+                              [
+                                _c("div", { staticClass: "col-span-1" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.getTodo(todo.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                            Edit\n                        "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "grid grid-rows-1 grid-cols-3 gap-4 p-1"
+                              },
+                              [
+                                _c("div", { staticClass: "col-span-1" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteTodo(todo.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                            Delete\n                        "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
+                        ])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              ])
+            ])
+          ])
+        ]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "container mx-auto",
-        staticStyle: { "padding-top": "2%" }
-      },
-      [
-        _c("div", { staticClass: "bg-white rounded p-5" }, [
-          _c("table", { staticClass: "table-fixed" }, [
-            _c("thead", [
-              _c("tr", [
-                _c("th", { staticClass: "w-1/2 px-4 py-2" }, [_vm._v("Title")]),
-                _vm._v(" "),
-                _c("th", { staticClass: "w-1/4 px-4 py-2" }, [_vm._v("Views")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody", [
-              _c("tr", [
-                _c("td", { staticClass: "border px-4 py-2" }, [
-                  _vm._v("Intro to CSS")
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "border px-4 py-2" }, [_vm._v("858")])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", { staticClass: "border px-4 py-2" }, [
-                  _vm._v(
-                    "A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design"
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "border px-4 py-2" }, [_vm._v("112")])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", { staticClass: "border px-4 py-2" }, [
-                  _vm._v("Chris")
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "border px-4 py-2" }, [_vm._v("1,280")])
-              ])
-            ])
-          ])
-        ])
-      ]
-    )
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "w-1/4 px-4 py-2" }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "w-1/4 px-4 py-2" }, [_vm._v("Actions")])
+      ])
+    ])
   }
 ]
 render._withStripped = true
